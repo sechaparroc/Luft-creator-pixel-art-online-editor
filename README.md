@@ -10,7 +10,7 @@ Just a simple tool to create bead patterns.
 * Click on the Palette buttons (at the bottom of the canvas) to change the brush color.
 * Double-click on any of the palette buttons to change the default color for a custom one. A [color picker](https://github.com/Simonwep/pickr) will pop up.
 
-
-
+## Example
+![Example](https://github.com/sechaparroc/Luft-creator/blob/master/images/luft.gif)
 
 
