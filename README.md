@@ -1,3 +1,7 @@
+---
+permalink: /index.html
+---
+
 # Luft-creator
 
 Just a simple tool to create bead patterns.
