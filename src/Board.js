@@ -129,16 +129,25 @@ class Board extends PIXI.Container{
         this.cols = cols;
         this.rows = rows;
 
+        const offsetRows = [];
+        for(let i = 0; i < rows; i++) offsetRows.push(i % 2 ? 0 : 0.5);
 
         if(!keepOld){
+            this.offset.length = 0;
             this.createBoard();
         } else{
             this.removeChildren();
             const h = this.dims.height / this.rows;
             const w = this.dims.width / this.cols;
+            for(let r = 0; r < this.offset.length; r++){
+                offsetRows[r] = this.offset[r];
+            }
+            this.offset = offsetRows;
+
             const cells = this.fillBoard(w, h);
             //copy old content
             for(let r = 0; r < Math.min(this.cells.length, cells.length); r++){
+                
                 for(let c = 0; c < Math.min(this.cells[r].length, cells[r].length); c++){
                     cells[r][c].color = this.cells[r][c].color;
                     cells[r][c].drawCell();
