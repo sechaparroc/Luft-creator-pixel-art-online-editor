@@ -139,7 +139,7 @@ class Board extends PIXI.Container{
             this.removeChildren();
             const h = this.dims.height / this.rows;
             const w = this.dims.width / this.cols;
-            for(let r = 0; r < this.offset.length; r++){
+            for(let r = 0; r < Math.min(this.offset.length, offsetRows.length); r++){
                 offsetRows[r] = this.offset[r];
             }
             this.offset = offsetRows;
