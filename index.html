@@ -13,6 +13,11 @@
     <div class="main-wrapper" style="height: 100vh;">
         <div class="container-fluid bg-dark h-100 text-light">
             <div class="row text-center" style="margin-right: 30px; margin-left: 30px;">
+                <label for="ratioRange">Cell ratio : <span id = "ratioRangeVal"></span></label>
+                <input type="range" class="custom-range" min="0.1" max="10" value="2" step="0.1" id="ratioRange">
+            </div>
+
+            <div class="row text-center" style="margin-right: 30px; margin-left: 30px;">
                 <label for="rowsRange">Rows : <span id = "rowsRangeVal"></span></label>
                 <input type="range" class="custom-range" min="1" max="100" value="30" step="1" id="rowsRange">
             </div>
@@ -26,7 +31,7 @@
                 <div class="col-2" style="margin-top: 15vh;">                    
                     <!-- <h2>Panel</h2> -->
                     <div class="btn-group btn-group-toggle btn-group-vertical" data-toggle="buttons" id="optionsPanel">
-                        <label class="btn btn-info active" style="margin-top: 5vh; margin-bottom: 8vh;">
+                        <label class="btn btn-info active" style="margin-top: 5vh; margin-bottom: 3vh;">
                             <input type="radio" name="options" id="option1" autocomplete="off" checked value="brush">
                             <svg width="5em" height="5em" viewBox="0 0 16 16" class="bi bi-brush" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M15.213 1.018a.572.572 0 0 1 .756.05.57.57 0 0 1 .057.746C15.085 3.082 12.044 7.107 9.6 9.55c-.71.71-1.42 1.243-1.952 1.596-.508.339-1.167.234-1.599-.197-.416-.416-.53-1.047-.212-1.543.346-.542.887-1.273 1.642-1.977 2.521-2.35 6.476-5.44 7.734-6.411z"/>
@@ -40,6 +45,16 @@
                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                 <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                             </svg>
+                        </label>
+
+
+                        <label class="btn btn-info" style="margin-bottom: 3vh;">
+                            <input type="radio" name="options" id="option3" autocomplete="off" value="offset">
+                            <svg width="5em" height="5em" viewBox="0 0 16 16" class="bi bi-arrow-left-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M10.146 7.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 11l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
+                                <path fill-rule="evenodd" d="M2 11a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 11zm3.854-9.354a.5.5 0 0 1 0 .708L3.207 5l2.647 2.646a.5.5 0 1 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
+                                <path fill-rule="evenodd" d="M2.5 5a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                              </svg>                        
                         </label>
 
                         <!-- <label class="btn btn-info" style="margin-bottom: 3vh;">

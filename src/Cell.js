@@ -3,7 +3,7 @@ class Cell extends PIXI.Graphics{
     highlightColor = true;
     selected = false;
 
-    constructor(container, x, y, dims, color = 0x585555, lineColor = 0x7f7676){
+    constructor(container, x, y, dims, color = 0xE8E8E8, lineColor = 0x7f7676){
         super();
         this.container = container;
         this.x = x;
@@ -40,7 +40,7 @@ class Cell extends PIXI.Graphics{
         const lineColor = this.highlightBorder ? 0xaea6d : this.lineColor;
         this.clear();
         this.beginFill(this.color, alphaColor);
-        this.lineStyle(4, lineColor, alphaBorder);
+        this.lineStyle(2, lineColor, alphaBorder);
         this.drawRect(0,0, this.dims.width, this.dims.height);    
         this.endFill();
     }

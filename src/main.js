@@ -55,11 +55,10 @@ const side = Math.min(height, width);
 const boardPosition = {x : width * 0.1, y : height * 0.1 };
 const boardDims = {width : width * 0.8, height : height * 0.7 };
 
-const board = new Board(app, 30 , 50, boardPosition, boardDims);
-board.palette = new Palette(app, 14, {x : board.x, y : (board.rows + 2 ) * board.dims.height / board.rows + board.y }, {width : board.dims.width, height : board.dims.height / board.rows});
+const board = new Board(app, 30 , 50, boardPosition, boardDims, 2);
+board.palette = new Palette(app, 14, {x : boardPosition.x, y : boardDims.height + boardPosition.y + 20 }, {width : boardDims.width, height : boardDims.height / board.rows});
 
 window.addEventListener('mouseup', () => {
-    console.log("Aqui");
     board.down = false;
 });
 
@@ -91,10 +90,14 @@ function sliderControl(name, onchange){
 }
 
 sliderControl("rowsRange", (value) => {
-    board.resizeBoard(value, board.cols, boardPosition, boardDims, true, true);
+    board.resizeBoard(value, board.cols, boardPosition, boardDims, board.ratio, true);
 });
 
 sliderControl("colsRange", (value) => {
-    board.resizeBoard(board.rows, value, boardPosition, boardDims, true, true);
+    board.resizeBoard(board.rows, value, boardPosition, boardDims, board.ratio, true);
+});
+
+sliderControl("ratioRange", (value) => {
+    board.resizeBoard(board.rows, board.cols, boardPosition, boardDims, value, true);
 });
 

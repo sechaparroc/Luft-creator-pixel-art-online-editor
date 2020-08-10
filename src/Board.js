@@ -3,24 +3,20 @@ class Board extends PIXI.Container{
     palette = null;
     down = false;
     mode = 'brush';
-    square = false;
+    ratio = 1;
+    offset = [];
 
-    constructor(app, rows, cols, position, dims, square = true){
+    constructor(app, rows, cols, position, dims, ratio = 1){
         super();
         this.rows = rows;
         this.cols = cols;
-        if(square){
-            const side = Math.min(dims.height / rows, dims.width / cols);
-            const offset = { x : (dims.width - cols * side) * 0.5, y :  (dims.width - rows * side) * 0.5 };
-            this.x = position.x + offset.x;
-            this.y = position.y;
-            this.dims = { width : side * cols, height : side * rows };
-        }else{
-            this.x = position.x;
-            this.y = position.y;
-            this.dims = dims;
-        }
-        this.square = square;
+        for(let i = 0; i < rows; i++) this.offset.push(i % 2 ? 0 : 0.5);
+        const side = Math.min(dims.height / rows, dims.width / (ratio * cols));
+        const offset = { x : (dims.width - ratio * cols * side) * 0.5, y :  (dims.height - rows * side) * 0.5 };
+        this.x = position.x + offset.x;
+        this.y = position.y + offset.y;
+        this.dims = { width : ratio * side * cols, height : side * rows };
+        this.ratio = ratio;
         this.createBoard();
         app.stage.addChild(this);
     }
@@ -49,6 +45,19 @@ class Board extends PIXI.Container{
         this._palette = palette;
     }
 
+    highlightRow(r, highlight = true){
+        for(let c = 0; c < this.cols; c++){
+            this.removeChild(this.cells[r][c]);
+            this.addChild(this.cells[r][c]);
+            this.cells[r][c].highlightBorder = highlight;
+            this.cells[r][c].drawCell();
+        }
+    }
+
+    toggleOffset(r){
+        this.offset[r] = this.offset[r] > 0 ? 0 : 0.5;
+    }
+
     createBoard(){
         this.clearCells();
         const h = this.dims.height / this.rows;
@@ -62,21 +71,36 @@ class Board extends PIXI.Container{
         for(let r = r_i; r < r_i + rows; r++){
             const rowsList = [];
             for(let c = c_i; c < c_i + cols; c++){
-                const cell = new Cell(this, c * w, r * h, {width : w, height : h});
+                const c_offset = this.offset[r] * w;
+                const cell = new Cell(this, c * w + c_offset, r * h, {width : w, height : h});
                 cell.on('pointerover', (e) => {
                     cell.container.removeChild(cell);
                     cell.container.addChild(cell);
                     cell.highlightBorder = true;
                     cell.drawCell();
                     if(this.down && this.palette.currentCell != null && (this.mode === 'brush' || this.mode === 'erase')){
-                        cell.color = this.mode === 'brush' ? this.palette.currentCell.color : 0x585555;
+                        cell.color = this.mode === 'brush' ? this.palette.currentCell.color : 0xE8E8E8;
                         cell.drawCell();
+                    } else if(this.mode === 'offset'){
+                        this.highlightRow(r, true);
+                    }
+                }).on('pointerout', () => {
+                    if(!cell.selected){
+                        cell.highlightBorder = false;
+                        cell.drawCell();
+                        if(this.mode === 'offset'){
+                            this.highlightRow(r, false);
+                        }
                     }
                 }).on('pointerdown', () =>{
                     this.down = true;
                     if(this.palette.currentCell != null && (this.mode === 'brush' || this.mode === 'erase')){
-                        cell.color = this.mode === 'brush' ? this.palette.currentCell.color : 0x585555;
+                        cell.color = this.mode === 'brush' ? this.palette.currentCell.color : 0xE8E8E8;
                         cell.drawCell();
+                    }
+                    if(this.mode === 'offset'){
+                        this.toggleOffset(r);
+                        this.resizeBoard(this.rows, this.cols, {x : this.x, y : this.y}, this.dims, this.ratio)
                     }
                 }).on('pointerup', () => {
                     this.down = false;
@@ -93,42 +117,29 @@ class Board extends PIXI.Container{
         this.cells.length = 0;
     }
 
-    resizeBoard(rows, cols, position, dims, square = true, keepOld = true){
+    resizeBoard(rows, cols, position, dims, ratio = 1, keepOld = true){
         const oldRows = rows;
         const oldCols = cols;
-        if(square){
-            const side = Math.min(dims.height / rows, dims.width / cols);
-            const offset = { x : (dims.width - cols * side) * 0.5, y :  (dims.width - rows * side) * 0.5 };
-            this.x = position.x + offset.x;
-            this.y = position.y;
-            this.dims = { width : side * cols, height : side * rows };
-        }else{
-            this.x = position.x;
-            this.y = position.y;
-            this.dims = dims;
-        }
-        this.square = square;
+        const side = Math.min(dims.height / rows, dims.width / (ratio * cols));
+        const offset = { x : (dims.width - ratio * cols * side) * 0.5, y :  (dims.height - rows * side) * 0.5 };
+        this.x = position.x + offset.x;
+        this.y = position.y + offset.y;
+        this.dims = { width : ratio * side * cols, height : side * rows };
+        this.ratio = ratio;
         this.cols = cols;
         this.rows = rows;
 
 
         if(!keepOld){
-            console.log("cols" + this.cols);
-            console.log("rows" + this.rows);
-            console.log("rows" + this.rows);
             this.createBoard();
         } else{
             this.removeChildren();
             const h = this.dims.height / this.rows;
             const w = this.dims.width / this.cols;
             const cells = this.fillBoard(w, h);
-
-            console.log(this.cells);
-            console.log(cells);
             //copy old content
             for(let r = 0; r < Math.min(this.cells.length, cells.length); r++){
                 for(let c = 0; c < Math.min(this.cells[r].length, cells[r].length); c++){
-                    console.log("row  " + r + " col " + c);
                     cells[r][c].color = this.cells[r][c].color;
                     cells[r][c].drawCell();
                 }
