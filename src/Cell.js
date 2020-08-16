@@ -45,4 +45,15 @@ class Cell extends PIXI.Graphics{
         this.endFill();
     }
 
+    save(){
+        const obj = {
+            x : this.x,
+            y : this.y,
+            color : this.color,
+            width : this.dims.width,
+            height : this.dims.height
+        };
+        return obj;
+    }
+
 }

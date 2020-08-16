@@ -45,7 +45,7 @@ app.renderer.view.style.position = "absolute";
 app.renderer.view.style.display = "block";
 
 app.renderer.autoResize = true;
-app.renderer.resize(window.innerWidth * 0.8, window.innerHeight * 0.8);
+app.renderer.resize(window.innerWidth * 0.8, window.innerHeight * 0.7);
 app.ticker.add(delta => gameLoop(delta));
 
 const height = app.renderer.view.height;
@@ -101,3 +101,44 @@ sliderControl("ratioRange", (value) => {
     board.resizeBoard(board.rows, board.cols, boardPosition, boardDims, value, true);
 });
 
+//load a local json file
+function loadJSON(file, callback) {   
+    let xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+    xobj.open('GET', file, true); // Replace 'my_data' with the path to your file
+    xobj.onreadystatechange = function () {
+          if (xobj.readyState == 4 && xobj.status == "200") {
+            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+            callback(xobj.responseText);
+          }
+    };
+    xobj.send(null);  
+ }
+ 
+ function init(file) {
+    loadJSON(file, function(response) {
+       // Parse JSON string into object
+       board.load(JSON.parse(response))
+    });
+}
+
+const file_loader = document.getElementById("file-loader");
+file_loader.addEventListener('change', ((event) => {
+    init(URL.createObjectURL(file_loader.files[0]));
+}));
+
+//Save a json file
+function exportToJSON() {
+    // Data URI
+    jsonData = 'data:application/json;charset=utf-8,' + board.save();
+    $('#file-save')
+        .attr({
+            'href': jsonData,
+            'target': '_blank'
+    });
+}
+
+$('#file-save').on('click', function() {
+    exportToJSON();
+});
+  

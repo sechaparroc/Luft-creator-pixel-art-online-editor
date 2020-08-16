@@ -147,7 +147,6 @@ class Board extends PIXI.Container{
             const cells = this.fillBoard(w, h);
             //copy old content
             for(let r = 0; r < Math.min(this.cells.length, cells.length); r++){
-                
                 for(let c = 0; c < Math.min(this.cells[r].length, cells[r].length); c++){
                     cells[r][c].color = this.cells[r][c].color;
                     cells[r][c].drawCell();
@@ -157,7 +156,30 @@ class Board extends PIXI.Container{
         }
     }
 
+    save(){
+        const cells = [];
+        for(let r = 0; r < this.cells.length; r++){
+            for(let c = 0; c < this.cells[r].length; c++){
+                const cell = this.cells[r][c].save();
+                cell.row = r;
+                cell.col = c;
+                cells.push(cell);
+            }
+        }
+        return JSON.stringify({ratio : this.ratio, offset : this.offset , cells : cells});        
+    }
 
+    load(jsonBoard){
+        this.ratio = jsonBoard.ratio;
+        this.offset = jsonBoard.offset;
+        const cells = jsonBoard.cells;
+        const rows = cells[cells.length - 1].row + 1
+        const cols = cells[cells.length - 1].col + 1
 
-
+        this.resizeBoard(rows, cols, this.position, this.dims, this.ratio);
+        cells.forEach(element => {
+            this.cells[element.row][element.col].color = element.color;
+            this.cells[element.row][element.col].drawCell();
+        });        
+    }
 }
