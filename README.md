@@ -1,6 +1,6 @@
 # Luft-creator
 
-Just a simple tool to create bead patterns. [Try it here.](https://sechaparroc.github.io/Luft-creator/)
+Just a simple tool to create bead patterns. [Try it here.](https://sechaparroc.github.io/Luft-creator-pixel-art-online-editor/)
 
 ## Usage
 
